@@ -8,7 +8,13 @@ pipeline {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/tedblair2/jenkins_automation']])
                 script {
+                    def imageExists = sh(script: 'docker images -q t3ddblair/ktor-jenkins:latest', returnStdout: true).trim()
+
+                    if (imageExists) {
+                        sh 'docker rmi t3ddblair/ktor-jenkins:latest'
+                    }
                     sh 'docker build -t t3ddblair/ktor-jenkins:${BUILD_ID} .'
+                    sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
         }
@@ -19,6 +25,7 @@ pipeline {
                         sh 'docker login -u t3ddblair -p ${dockerpwd}'
                     }
                     sh 'docker push t3ddblair/ktor-jenkins:${BUILD_ID}'
+                    sh 'docker push t3ddblair/ktor-jenkins:latest'
                 }
             }
         }
