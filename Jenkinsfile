@@ -14,7 +14,7 @@ pipeline {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
                     sh 'docker build -t t3ddblair/ktor-jenkins:${BUILD_ID} .'
-                    sh 'docker tag t3ddblair/ktor-jenkins:${version} t3ddblair/ktor-jenkins:latest'
+                    sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
         }
