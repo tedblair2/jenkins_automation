@@ -13,9 +13,7 @@ pipeline {
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-
-                    def version = (BUILD_ID - 1) / 10 + 1
-                    sh 'docker build -t t3ddblair/ktor-jenkins:${version} .'
+                    sh 'docker build -t t3ddblair/ktor-jenkins:${(BUILD_ID-1)/10+1} .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${version} t3ddblair/ktor-jenkins:latest'
                 }
             }
@@ -26,8 +24,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpwd')]) {
                         sh 'docker login -u t3ddblair -p ${dockerpwd}'
                     }
-                    def version = (BUILD_ID - 1) / 10 + 1
-                    sh 'docker push t3ddblair/ktor-jenkins:${version}'
+                    sh 'docker push t3ddblair/ktor-jenkins:${(BUILD_ID-1)/10+1}'
                 }
             }
         }
