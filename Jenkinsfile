@@ -14,7 +14,7 @@ pipeline {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
                     def group = (BUILD_ID.toInteger() - 1) / 10 + 1
-                    def version = group % 1 == 0 ? "${group}.0" : group
+                    def version = (group % 1 != 0) ? group.toString() : "${group}.0"
                     sh 'docker build -t t3ddblair/ktor-jenkins:${version} .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${version} t3ddblair/ktor-jenkins:latest'
                 }
@@ -27,7 +27,7 @@ pipeline {
                         sh 'docker login -u t3ddblair -p ${dockerpwd}'
                     }
                     def group = (BUILD_ID.toInteger() - 1) / 10 + 1
-                    def version = group % 1 == 0 ? "${group}.0" : group
+                    def version = (group % 1 != 0) ? group.toString() : "${group}.0"
                     sh 'docker push t3ddblair/ktor-jenkins:${version}'
                 }
             }
