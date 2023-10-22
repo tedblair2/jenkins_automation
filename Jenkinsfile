@@ -41,7 +41,7 @@ pipeline {
         stage('Deploy to k8s') {
             steps {
                 script {
-                    sh 'kubectl apply -f ktor.jenkins.yaml'
+                    kubernetesDeploy(configs: "ktor-jenkins.yaml")
                 }
             }
         }
