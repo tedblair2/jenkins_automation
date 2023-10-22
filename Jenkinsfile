@@ -24,8 +24,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpwd')]) {
                         sh 'docker login -u t3ddblair -p ${dockerpwd}'
                     }
-                    sh 'docker push t3ddblair/ktor-jenkins:${BUILD_ID}'
                     sh 'docker push t3ddblair/ktor-jenkins:latest'
+                    sh 'docker push t3ddblair/ktor-jenkins:${BUILD_ID}'
                 }
             }
         }
