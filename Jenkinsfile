@@ -13,7 +13,7 @@ pipeline {
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-                    sh 'docker build -t t3ddblair/ktor-jenkins:${BUILD_ID} .'
+                    sh 'docker build -t t3ddblair/ktor-jenkins:$(( ($BUILD_ID-1)/10.+1.  )) .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
