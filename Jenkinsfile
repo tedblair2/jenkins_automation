@@ -44,7 +44,7 @@ pipeline {
         stage('Test k8s') {
             steps {
                 script {
-                    sh("kubectl --kubeconfig $MY_KUBECONFIG get pods")
+                    sh("kubectl get pods")
                 }
             }
         }
