@@ -3,6 +3,9 @@ pipeline {
     tools {
         gradle 'gradle'
     }
+    environment {
+        MY_KUBECONFIG=credentials('kubeconfig')
+    }
     stages {
         stage('Build docker image') {
             steps {
@@ -13,8 +16,7 @@ pipeline {
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-                    Curr_Version="${(BUILD_ID.toFloat-1.toFloat)/10.toFloat+1.toFloat}"
-                    sh 'docker build -t t3ddblair/ktor-jenkins:${Curr_Version} .'
+                    sh 'docker build -t t3ddblair/ktor-jenkins:${BUILD_ID} .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
@@ -36,6 +38,13 @@ pipeline {
                         sh 'docker login -u t3ddblair -p ${dockerpwd}'
                     }
                     sh 'docker push t3ddblair/ktor-jenkins:latest'
+                }
+            }
+        }
+        stage('Test k8s') {
+            steps {
+                script {
+                    sh("kubectl --kubeconfig $MY_KUBECONFIG get pods")
                 }
             }
         }
