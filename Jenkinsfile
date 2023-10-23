@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('Build docker image') {
             steps {
+                def version=(BUILD_ID-1)/10+1
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/tedblair2/jenkins_automation']])
                 script {
                     def imageExists = sh(script: 'docker images -q t3ddblair/ktor-jenkins:latest', returnStdout: true).trim()
@@ -13,7 +14,7 @@ pipeline {
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-                    sh 'docker build -t t3ddblair/ktor-jenkins:$(( ($BUILD_ID-1)/10.+1.  )) .'
+                    sh 'docker build -t t3ddblair/ktor-jenkins:${version} .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
