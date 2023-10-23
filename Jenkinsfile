@@ -13,8 +13,8 @@ pipeline {
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-                    def version=(BUILD_ID-1)/10+1
-                    sh 'docker build -t t3ddblair/ktor-jenkins:${version} .'
+                    Curr_Version="${(Float.parseFloat(BUILD_ID)-1)/Float.parseFloat(10)+1}"
+                    sh 'docker build -t t3ddblair/ktor-jenkins:${Curr_Version} .'
                     sh 'docker tag t3ddblair/ktor-jenkins:${BUILD_ID} t3ddblair/ktor-jenkins:latest'
                 }
             }
