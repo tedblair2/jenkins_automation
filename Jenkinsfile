@@ -3,9 +3,6 @@ pipeline {
     tools {
         gradle 'gradle'
     }
-    environment {
-        MY_KUBECONFIG=credentials('kubeconfig')
-    }
     stages {
         stage('Build docker image') {
             steps {
@@ -41,10 +38,10 @@ pipeline {
                 }
             }
         }
-        stage('Test k8s') {
+        stage('Deploy to k8s') {
             steps {
                 script {
-                    sh("kubectl get pods")
+                    sh("kubectl apply -f ktor-jenkins.yaml")
                 }
             }
         }
