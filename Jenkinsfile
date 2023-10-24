@@ -11,12 +11,12 @@ pipeline {
                     def imageExists = sh(script: 'docker images -q t3ddblair/ktor-jenkins:latest', returnStdout: true).trim()
                     def newBuildId = BUILD_ID.toInteger() - 1
                     def result = (newBuildId / 10) + 1
-                    def version = String.format("%.1f", result)
+                    def version = String.format("%.1f", result).toFloat()
                     if (imageExists) {
                         sh 'docker rmi t3ddblair/ktor-jenkins:latest'
                     }
-                    sh 'docker build -t t3ddblair/ktor-jenkins:${version.toFloat()} .'
-                    sh 'docker tag t3ddblair/ktor-jenkins:${version.toFloat()} t3ddblair/ktor-jenkins:latest'
+                    sh 'docker build -t t3ddblair/ktor-jenkins:${version} .'
+                    sh 'docker tag t3ddblair/ktor-jenkins:${version} t3ddblair/ktor-jenkins:latest'
                 }
             }
         }
@@ -28,8 +28,8 @@ pipeline {
                     }
                     def newBuildId = BUILD_ID.toInteger() - 1
                     def result = (newBuildId / 10) + 1
-                    def version = String.format("%.1f", result)
-                    sh 'docker push t3ddblair/ktor-jenkins:${version.toFloat()}'
+                    def version = String.format("%.1f", result).toFloat()
+                    sh 'docker push t3ddblair/ktor-jenkins:${version}'
                 }
             }
         }
