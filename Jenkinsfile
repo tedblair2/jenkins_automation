@@ -3,6 +3,9 @@ pipeline {
     tools {
         gradle 'gradle'
     }
+    environment {
+        KUBECONFIG = credentials('k8sconfig')
+    }
     stages {
         stage('Build docker image') {
             steps {
@@ -46,7 +49,7 @@ pipeline {
         stage('Deploy to k8s') {
             steps {
                 script {
-                    sh("kubectl apply -f ktor-jenkins.yaml")
+                    sh 'export KUBECONFIG=$KUBECONFIG && kubectl apply -f ktor-jenkins.yaml'
                 }
             }
         }
